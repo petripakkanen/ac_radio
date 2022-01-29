@@ -1,2 +1,3 @@
 # ac_radio
-Tivoli audio fm-radio  replaced with raspberry pi.
+Audio stream player with reliable switch code to change stream via external switch. Code was used in project where Tivoli audio fm-radio was converted to internet stream radio with raspberry pi.
+
