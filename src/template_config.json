@@ -1,0 +1,12 @@
+{
+    "urls": [""],
+    "prestreams": [{"":""}],
+    "allowed_bluetooth": [""],
+    "streams": [
+                {
+                    "name": "",
+                    "prestream": "",
+                    "stream_url": ""
+                }
+                ]
+}

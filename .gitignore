@@ -132,3 +132,5 @@ dmypy.json
 speakit
 tmp
 *.mp3
+*.save
+# src/ac_radio/config.json
