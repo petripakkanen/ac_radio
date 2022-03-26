@@ -8,7 +8,6 @@ class ButtonHandler(threading.Thread):
     '''
     def __init__(self, stream_player, edge='both', bouncetime=200, **kwargs):  # bouncetime = ms
         super().__init__(daemon=True)
-        print(kwargs)
         self.edge = edge    # rising, falling, both
         self.bouncetime = float(bouncetime)/1000    # debounce delay, set 0 for software switch
 

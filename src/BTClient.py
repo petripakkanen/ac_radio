@@ -1,6 +1,7 @@
 import threading
 import subprocess as sp
 from .Configuration import Configuration
+from .logger import get_logger
 
 class BTClient(threading.Thread):
     '''
@@ -16,14 +17,15 @@ class BTClient(threading.Thread):
         self.allowed_devices = None
         self.lock = threading.Lock()
         self.allowed_devices = self.read_allowed_bluetooth_devices_from_config(config_file)
+        self.logger = get_logger()
 
         if allowed:
             try:
                 t = threading.Thread(target=self.sniff_connection, args=args)
                 t.start()
             except Exception as e:
-                print(e)
-        print(f"BTClient created {self}")
+                self.logger.error(e)
+        self.logger.debug(f"BTClient created {self}")
 
     def sniff_connection(self):
         try:
@@ -34,13 +36,13 @@ class BTClient(threading.Thread):
                 else:
                     self.is_connected = False
         except Exception as e:
-            print("Check hcitool con output")
-            print(e)
+            self.logger.error("Check hcitool con output")
+            self.logger.error(e)
 
     def read_allowed_bluetooth_devices_from_config(self, config_file):
         try:
             return Configuration.read_config_file(config_file)["allowed_bluetooth"]
         except Exception as e:
-            print("Check configuration")
-            print(e)
+            self.logger.error("Check configuration")
+            self.logger.error(e)
         return
