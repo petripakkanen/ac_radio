@@ -21,23 +21,25 @@ class StreamPlayer():
         self.streams = self.config["streams"]
         for i in range(len(self.streams)-1):
             self.streams[i]["id"] = i
+        self.stream_urls = self.config["stream_urls"]
         self.prestreams = self.config["prestreams"]
         self.bluetooth = None
         self.playing = None
-        self.block_play = False
+        self.block_play = True      # Functinality that multiple sources can output to same destination
         self.stream_change_pending = True
 
         if not simulation:
             self.player = mpv.MPV(ytdl=True)     # ytdl = Youtube downloader to support m3u8
         else:
             self.player = {}
-        self.logger = get_logger()
+        self.logger = get_logger("StreamPlayer")
 
-    def setNextActiveStream(self, num=1):
+    def setNextActiveStream(self, num=-1):
+
         # if num given set use it as id keys
         # TODO functionality used by custom playlists
-        if num == 1:
-            self.active_stream_id += num
+        if num == -1:
+            self.active_stream_id += abs(num)
         else:
             self.active_stream_id = num
         # Limit to streams length 0 to n
@@ -46,6 +48,8 @@ class StreamPlayer():
         elif self.active_stream_id < 0:
             self.active_stream_id = len(self.streams) - 1
         self.stream_change_pending = True
+
+        self.logger.debug(f"Set next active stream to {self.active_stream_id}")
         # while self.active_stream_id == self.lastindex:
         #    self.active_stream_id = random.randint(0,len(self.streams)-1)
         # self.lastindex = self.active_stream_id
@@ -66,8 +70,15 @@ class StreamPlayer():
                 self.player.quit()  # kill previous player
                 _player.wait_for_playback()  # Wait until prestream is finished
                 self.player = _player   # re-use player
-                self.player.play(self.streams[self.active_stream_id]["stream_url"])    # Play actual stream
-                # player.wait_for_playback()    # USE WITH CAUSION
+
+                # FIXME Update config to use urls as dicts so one config only refers via key to urls
+                #  > similiar solution than with prestreams
+                for index, stream in enumerate(self.stream_urls):
+                    for key in stream.keys():
+                        if key == self.streams[self.active_stream_id]["stream_url"]:
+                            #_player.play(stream[key])
+                            self.player.play(self.stream_urls[self.active_stream_id][key])    # Play actual stream
+                # player.wait_for_playback()    # USE WITH CAUTION
                 self.playing = True
                 self.stream_change_pending = False
             except Exception as e:

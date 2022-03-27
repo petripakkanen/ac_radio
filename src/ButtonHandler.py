@@ -13,7 +13,7 @@ class ButtonHandler(threading.Thread):
 
         self.stream_player = stream_player
         self.lock = threading.Lock()
-        self.logger = get_logger()
+        self.logger = get_logger("ButtonHandler")
 
     def __call__(self, *args):
         if not self.lock.acquire(blocking=False):

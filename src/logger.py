@@ -1,21 +1,23 @@
 import logging
 
-# create logger
-logger = logging.getLogger('ac_radio')
-logger.setLevel(logging.DEBUG)
+logging.basicConfig(filename='example.log', level=logging.DEBUG)
 
-# create console handler and set level to debug
-ch = logging.StreamHandler()
-ch.setLevel(logging.DEBUG)
+def get_logger(_name="ac_radio"):
+    # create logger
+    logger = logging.getLogger(_name)
+    logger.setLevel(logging.DEBUG)
 
-# create formatter
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    # create console handler and set level to debug
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
 
-# add formatter to ch
-ch.setFormatter(formatter)
+    # create formatter
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-# add ch to logger
-logger.addHandler(ch)
+    # add formatter to ch
+    ch.setFormatter(formatter)
 
-def get_logger():
+    # add ch to logger
+    logger.addHandler(ch)
+    logger.debug(logger)
     return logger
