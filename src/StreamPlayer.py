@@ -65,7 +65,7 @@ class StreamPlayer():
                 for index, prestream in enumerate(self.prestreams):
                     for key in prestream.keys():
                         if key == self.streams[self.active_stream_id]["prestream"]:
-                            _player.play(prestream[key])
+                            _player.play(self.prestreams[self.active_stream_id][key])
 
                 self.player.quit()  # kill previous player
                 _player.wait_for_playback()  # Wait until prestream is finished
